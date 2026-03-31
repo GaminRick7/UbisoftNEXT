@@ -4,9 +4,11 @@
 
 I placed 2nd at the Ubisoft NEXT 2026 Programming Contest!
 
-This year's theme was all about simulating a large number of entities. The contest involved building an entire game engine from scratch in C++ on top of the Ubisoft API (OpenGL/FreeGLUT), and then building a game on top of it. BAGGAGE is my take on that: a crowd simulation puzzle game where you place directional arrows on a height-mapped grid to shepherd thousands of agents toward a goal, all while drones patrol the area trying to pick them off. It gets hectic.
+This year's theme was all about **simulating a large number of entities**. The contest involved building an entire game engine from scratch in C++ on top of the Ubisoft API (OpenGL/FreeGLUT), and then building a game on top of it.
 
-## What I Built
+**BAGGAGE** is my take on that: a crowd simulation puzzle game where you place directional arrows on a height-mapped grid to shepherd thousands of agents toward a goal, all while drones patrol the area trying to pick them off. 
+
+## Features
 
 I wrote a full game engine from scratch for this contest. Some highlights:
 
