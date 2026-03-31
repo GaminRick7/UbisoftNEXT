@@ -1,6 +1,6 @@
 # BAGGAGE | Ubiosft NEXT 2026 Finalist
 
-<video src="NEXTpreview.mp4" controls></video>
+https://github.com/user-attachments/assets/85848714-5eab-44ad-8b77-97dbc2beee93
 
 I placed 2nd at the Ubisoft NEXT 2026 Programming Contest!
 
