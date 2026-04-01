@@ -1,4 +1,4 @@
-# BAGGAGE | Ubiosft NEXT 2026 Finalist
+# BAGGAGE | Ubisoft NEXT 2026 Finalist
 
 https://github.com/user-attachments/assets/85848714-5eab-44ad-8b77-97dbc2beee93
 
