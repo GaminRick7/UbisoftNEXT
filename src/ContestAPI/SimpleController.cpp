@@ -31,6 +31,33 @@
 #include "SDL3/SDL_gamepad.h"
 #include <iostream>
 
+
+static SDL_Gamepad* s_openGamepads[MAX_CONTROLLERS] = {};
+static SDL_JoystickID s_openGamepadIds[MAX_CONTROLLERS] = {};
+
+void CloseGamepadSlot(const int slot)
+{
+	if (slot < 0 || slot >= MAX_CONTROLLERS)
+	{
+		return;
+	}
+
+	if (s_openGamepads[slot] != nullptr)
+	{
+		SDL_CloseGamepad(s_openGamepads[slot]);
+		s_openGamepads[slot] = nullptr;
+		s_openGamepadIds[slot] = 0;
+	}
+}
+
+void CloseAllGamepads()
+{
+	for (int i = 0; i < MAX_CONTROLLERS; ++i)
+	{
+		CloseGamepadSlot(i);
+	}
+}
+
 #endif
 
 #if BUILD_PLATFORM_WINDOWS
@@ -258,11 +285,15 @@ void CSimpleControllers::Update()
 //-----------------------------------------------------------------------------
 void CSimpleControllers::Update()
 {
+	SDL_UpdateGamepads();
+
 	bool hasControllers = SDL_HasGamepad();
 
 	// No controllers so lets fake one using keyboard defines.
 	if (!hasControllers)
 	{
+		CloseAllGamepads();
+
 		m_Controllers[0].m_state.m_lastButtons = m_Controllers[0].m_state.m_buttons;
 
 		m_Controllers[0].m_bConnected = true;
@@ -327,7 +358,19 @@ void CSimpleControllers::Update()
 		count = std::min(count, MAX_CONTROLLERS);
 		for (int pad = 0; pad < count; pad++)
 		{
-			SDL_Gamepad* gamepad = SDL_OpenGamepad(gamepads[pad]);
+			SDL_Gamepad* gamepad = s_openGamepads[pad];
+
+			if (gamepad == nullptr || !SDL_GamepadConnected(gamepad) || s_openGamepadIds[pad] != gamepads[pad])
+			{
+				CloseGamepadSlot(pad);
+				gamepad = SDL_OpenGamepad(gamepads[pad]);
+
+				if (gamepad != nullptr)
+				{
+					s_openGamepads[pad] = gamepad;
+					s_openGamepadIds[pad] = gamepads[pad];
+				}
+			}
 
 			if (gamepad == nullptr)
 			{
@@ -373,8 +416,11 @@ void CSimpleControllers::Update()
 			HANDLE_BUTTON(SDL_GAMEPAD_BUTTON_START, App::BTN_START)
 
 			m_Controllers[pad].m_state.m_buttons = buttons;
+		}
 
-			SDL_CloseGamepad(gamepad);
+		for (int pad = count; pad < MAX_CONTROLLERS; ++pad)
+		{
+			CloseGamepadSlot(pad);
 		}
 
 		//Some Useful Controller Debug Code that outputs the controller state each frame
